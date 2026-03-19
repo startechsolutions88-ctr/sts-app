@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  body { 
+    background-color: #f1f5f9; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    padding: 0 20px 20px 20px; /* Removed top padding to let header touch the top */
+    margin: 0; 
+  }
+  
+  /* STICKY HEADER SETTINGS */
+  .header-container {
+    position: -webkit-sticky; /* Support for Safari */
+    position: sticky;
+    top: 0;
+    background-color: rgba(241, 245, 249, 0.95); /* Matches body color with slight transparency */
+    padding: 20px 0;
+    z-index: 1000;
+    backdrop-filter: blur(5px); /* Adds a nice frosted glass effect when scrolling */
+  }
+
+  .page-title { 
+    color: #1a365d; 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    text-align: center; 
+    margin: 0; 
+    font-size: 22px;
+  }
+
+  .service-card { 
+    background: white; 
+    border-radius: 15px; 
+    padding: 18px; 
+    margin-bottom: 15px; 
+    display: flex; 
+    align-items: center; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+  }
+
+  .icon-box { 
+    background: #1a365d; 
+    color: white; 
+    min-width: 50px; 
+    height: 50px; 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-right: 15px; 
+    font-size: 20px; 
+  }
+
+  .service-info {
+    flex: 1;
+  }
+
+  .service-info h3 { 
+    margin: 0; 
+    color: #1e293b; 
+    font-size: 16px; 
+  }
+
+  .service-info p { 
+    margin: 5px 0 0; 
+    color: #64748b; 
+    font-size: 13px; 
+    line-height: 1.4; 
+  }
+
+  .btn-back { 
+    display: block; 
+    text-align: center; 
+    margin-top: 30px; 
+    color: #1a365d; 
+    text-decoration: none; 
+    font-weight: bold; 
+    font-size: 14px;
+    padding-bottom: 30px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header-container">
+    <h2 class="page-title">Our Services</h2>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-globe"></i></div>
+      <div class="service-info">
+        <h3>Software & Website Designing</h3>
+        <p>Modern website designing, custom mobile app development, and software systems for businesses.</p>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-laptop"></i></div>
+      <div class="service-info">
+        <h3>Computer Repair & Maintenance</h3>
+        <p>We solve any computer problem, small or big—hardware faults, motherboard repairs, and system upgrades.</p>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-mobile-alt"></i></div>
+      <div class="service-info">
+        <h3>Phone Repairing</h3>
+        <p>Changing phone terminals, batteries, screens, and solving any smartphone hardware or software problems.</p>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-bolt"></i></div>
+      <div class="service-info">
+        <h3>Phone Flashing </h3>
+        <p>Software reinstallation, system recovery, and performance optimization.</p>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-database"></i></div>
+      <div class="service-info">
+        <h3>Data Recovery & Storage</h3>
+        <p>Recovering lost files, repairing memory cards, and secure data backup solutions.</p>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-wifi"></i></div>
+      <div class="service-info">
+        <h3>Networking Services</h3>
+        <p>Network setup, router configuration, and solving internet connectivity issues.</p>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-microchip"></i></div>
+      <div class="service-info">
+        <h3>Electronics & PCB Repair</h3>
+        <p>Advanced circuit diagnostics, ultrasonic cleaning for liquid damage, and technical testing.</p>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box"><i class="fas fa-shopping-cart"></i></div>
+      <div class="service-info">
+        <h3>Tech Sales & Accessories</h3>
+        <p>Quality computer parts, chargers, cables, and essential tech accessories for your devices.</p>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+</html>

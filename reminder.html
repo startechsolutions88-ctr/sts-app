@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  :root {
+    --bg-color: #0B2B4F;
+    --text-color: #ffffff;
+    --accent: #fbbf24;
+    --success: #25D366;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --input-bg: rgba(0, 0, 0, 0.3);
+  }
+
+  body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    margin: 0; padding: 20px; padding-bottom: 100px;
+  }
+
+  /* CENTERED NOTIFICATION BOX */
+  #toast {
+    visibility: hidden;
+    width: 85%;
+    max-width: 320px;
+    background-color: #1e293b;
+    color: #fff;
+    text-align: center;
+    border-radius: 20px;
+    padding: 30px 20px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    box-shadow: 0 0 30px rgba(0,0,0,0.8), 0 0 0 2000px rgba(11, 43, 79, 0.7); 
+    border: 2px solid var(--accent);
+    font-weight: 600;
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  
+  #toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* STOP BUTTON STYLE */
+  #stopBtn {
+    margin-top: 15px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    display: none; /* Hidden by default */
+    width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  /* UI COMPONENTS */
+  .header { text-align: center; margin-bottom: 25px; }
+  .notify-wrapper { position: relative; display: inline-block; margin-bottom: 10px; }
+  .header .fa-bell { color: var(--accent); font-size: 42px; position: relative; z-index: 2; }
+  
+  .ping {
+    position: absolute; top: 0; right: 0; height: 12px; width: 12px;
+    background-color: #ef4444; border-radius: 50%; border: 2px solid var(--bg-color);
+    z-index: 3; animation: pulse 2s infinite; display: none;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  }
+
+  .header h2 { margin: 10px 0 5px; font-size: 22px; }
+  .header p { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; }
+
+  .booking-form { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid rgba(251, 191, 36, 0.2); margin-bottom: 30px; }
+  .form-group label { display: block; font-size: 12px; color: var(--accent); margin-bottom: 5px; font-weight: bold; }
+  .form-group input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: var(--input-bg); color: white; font-size: 16px; box-sizing: border-box; outline: none; margin-bottom: 15px; }
+  .row { display: flex; gap: 12px; }
+  .row .form-group { flex: 1; }
+
+  .submit-btn { width: 100%; background: var(--accent); color: #0B2B4F; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .whatsapp-btn { width: 90%; background: var(--success); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px; margin-top: 12px; display: none; text-decoration: none; text-align: center; }
+
+  .list-title { font-size: 13px; color: #94a3b8; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; border-left: 3px solid var(--accent); padding-left: 10px; }
+  .appointment-card { background: #112a45; border-radius: 15px; padding: 18px; margin-bottom: 15px; border-left: 5px solid var(--accent); position: relative; }
+  .delete-btn { position: absolute; top: 18px; right: 15px; color: #ef4444; font-size: 18px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+  <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+  
+  <div id="toast">
+    <div id="toastText">Message goes here</div>
+    <button id="stopBtn" onclick="stopAlarm()">Stop Alarm</button>
+  </div>
+
+  <div class="header">
+    <div class="notify-wrapper">
+      <i class="fas fa-bell"></i>
+      <div id="notifDot" class="ping"></div>
+    </div>
+    <h2>Set Reminder</h2>
+    <p>Star Tech Solutions Ltd</p>
+  </div>
+
+  <div class="booking-form">
+    <div class="form-group">
+      <label>Nature of Problem</label>
+      <input type="text" id="problemName" placeholder="e.g. Battery Replacement">
+    </div>
+    <div class="row">
+      <div class="form-group"><label>Date</label><input type="date" id="visitDate"></div>
+      <div class="form-group"><label>Time</label><input type="time" id="visitTime"></div>
+    </div>
+    <button id="mainBtn" class="submit-btn" onclick="saveReminder()">SAVE & SET ALARM</button>
+    <a id="waLink" class="whatsapp-btn" href="#" target="_blank"><i class="fab fa-whatsapp"></i> MESSAGE STAR TECH SOLUTIONS</a>
+  </div>
+
+  <div class="list-title">Active Reminders</div>
+  <div id="reminderList">
+    <p id="emptyMsg" style="text-align: center; font-size: 13px; color: #475569;">No active reminders set.</p>
+  </div>
+
+  <script>
+    // --- 1. UNLOCKER ---
+    document.addEventListener('click', function unlock() {
+      const sound = document.getElementById('alarmSound');
+      sound.play().then(() => { sound.pause(); sound.currentTime = 0; });
+      if ("vibrate" in navigator) navigator.vibrate(50);
+      document.removeEventListener('click', unlock);
+    }, { once: true });
+
+    // --- 2. STOP ALARM LOGIC ---
+    function stopAlarm() {
+      const toast = document.getElementById("toast");
+      const sound = document.getElementById('alarmSound');
+      const stopBtn = document.getElementById('stopBtn');
+      
+      toast.className = ""; 
+      sound.pause();      
+      sound.currentTime = 0; 
+      sound.loop = false;
+      stopBtn.style.display = "none";
+      if ("vibrate" in navigator) navigator.vibrate(0);
+      clearTimeout(window.toastTimer);
+    }
+
+    // --- 3. TOAST LOGIC ---
+    function showToast(message, isAlarm = false) {
+      const toast = document.getElementById("toast");
+      const text = document.getElementById("toastText");
+      const sound = document.getElementById('alarmSound');
+      const stopBtn = document.getElementById('stopBtn');
+      
+      text.innerText = message;
+      toast.className = "show";
+      
+      const duration = isAlarm ? 30000 : 3000;
+      
+      if (isAlarm) {
+        stopBtn.style.display = "block"; // Show the stop button
+        sound.loop = true;
+        sound.play().catch(e => console.log("Unlock needed"));
+        if ("vibrate" in navigator) {
+          navigator.vibrate([500, 300, 500, 300, 500, 300, 500]);
+        }
+      } else {
+        stopBtn.style.display = "none";
+      }
+
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => { 
+        if(toast.className === "show") stopAlarm();
+      }, duration);
+    }
+
+    // --- 4. ENGINE & DATA ---
+    setInterval(() => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      const curDate = `${year}-${month}-${day}`;
+      const curTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+      let saved = JSON.parse(localStorage.getItem('sts_reminders') || "[]");
+      let changed = false;
+
+      saved.forEach(item => {
+        if (item.date === curDate && item.time === curTime && !item.notified) {
+          showToast("🔔 STS Reminder: " + item.problem + "\n\nVisit Star Tech Solutions at Shop No. 227 Nakambala Market!", true);
+          item.notified = true;
+          changed = true;
+        }
+      });
+      if (changed) {
+        localStorage.setItem('sts_reminders', JSON.stringify(saved));
+        updateUIState(saved);
+      }
+    }, 10000);
+
+    function saveReminder() {
+      const p = document.getElementById('problemName');
+      const d = document.getElementById('visitDate');
+      const t = document.getElementById('visitTime');
+      if (!p.value || !d.value || !t.value) return showToast("⚠️ Fill all fields.", false);
+
+      const reminderData = { problem: p.value, date: d.value, time: t.value, id: Date.now(), notified: false };
+      const existing = JSON.parse(localStorage.getItem('sts_reminders') || "[]");
+      existing.push(reminderData);
+      localStorage.setItem('sts_reminders', JSON.stringify(existing));
+
+      displayReminder(reminderData);
+      updateUIState(existing);
+      document.getElementById('emptyMsg').style.display = "none";
+      showToast("✅ Reminder Saved Successfully", false);
+
+      const waBtn = document.getElementById('waLink');
+      const waMsg = `*STS BOOKING*%0AProblem: ${p.value}%0ADate: ${d.value}%0ATime: ${t.value}%0A%0A_Visiting Shop No. 227 Nakambala Market_`;
+      waBtn.href = `https://wa.me/260972570250?text=${waMsg}`;
+      waBtn.style.display = "block";
+      p.value = ""; d.value = ""; t.value = "";
+    }
+
+    function updateUIState(saved) {
+      document.getElementById('notifDot').style.display = saved.some(i => !i.notified) ? "block" : "none";
+    }
+
+    function displayReminder(data) {
+      const list = document.getElementById('reminderList');
+      const card = document.createElement('div');
+      card.className = 'appointment-card';
+      card.setAttribute('data-id', data.id);
+      card.innerHTML = `
+        <div class="app-info">
+          <h4 style="margin:0; color:var(--accent);">${data.problem}</h4>
+          <span style="font-size:12px;"><i class="far fa-clock"></i> ${data.date} at ${data.time}</span>
+          <i class="fas fa-trash-alt delete-btn" onclick="deleteReminder(${data.id})"></i>
+        </div>`;
+      list.prepend(card);
+    }
+
+    function deleteReminder(id) {
+      let saved = JSON.parse(localStorage.getItem('sts_reminders') || "[]").filter(i => i.id !== id);
+      localStorage.setItem('sts_reminders', JSON.stringify(saved));
+      document.querySelector(`[data-id="${id}"]`).remove();
+      updateUIState(saved);
+      if(saved.length === 0) document.getElementById('emptyMsg').style.display = "block";
+      showToast("🗑️ Reminder Deleted", false);
+    }
+
+    window.onload = function() {
+      let saved = JSON.parse(localStorage.getItem('sts_reminders') || "[]");
+      updateUIState(saved);
+      if(saved.length > 0) {
+        document.getElementById('emptyMsg').style.display = "none";
+        saved.forEach(d => displayReminder(d));
+      }
+    };
+  </script>
+</body>
+</html>

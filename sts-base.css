@@ -1,0 +1,469 @@
+/**
+ * STS Base Styles v1.0
+ * Core layout, components, and utility classes
+ * Include in all pages: <link rel="stylesheet" href="sts-base.css">
+ */
+
+/* ========== RESET & BASE STYLES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #ffffff;
+    color: #1e293b;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
+
+a {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+/* ========== BUTTON STYLES ========== */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-weight: 600;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-block {
+    width: 100%;
+    display: block;
+}
+
+/* Button variants */
+.btn-primary {
+    background-color: #1a365d;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #64748b;
+    color: white;
+}
+
+.btn-success {
+    background-color: #22c55e;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-warning {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.btn-accent {
+    background-color: #fbbf24;
+    color: #1a365d;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid currentColor;
+}
+
+/* ========== CARD STYLES ========== */
+.card {
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: white;
+}
+
+.card-header {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.card-footer {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+/* ========== FORM ELEMENTS ========== */
+input, select, textarea {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #fbbf24;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* ========== GRID LAYOUTS ========== */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+/* ========== FLEX UTILITIES ========== */
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-column { display: flex; flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+.flex-3 { flex: 3; }
+
+.gap-1 { gap: 5px; }
+.gap-2 { gap: 10px; }
+.gap-3 { gap: 15px; }
+.gap-4 { gap: 20px; }
+.gap-5 { gap: 25px; }
+
+/* ========== SPACING UTILITIES ========== */
+.m-0 { margin: 0; }
+.m-1 { margin: 5px; }
+.m-2 { margin: 10px; }
+.m-3 { margin: 15px; }
+.m-4 { margin: 20px; }
+.m-5 { margin: 25px; }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 5px; }
+.mt-2 { margin-top: 10px; }
+.mt-3 { margin-top: 15px; }
+.mt-4 { margin-top: 20px; }
+.mt-5 { margin-top: 25px; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 5px; }
+.mb-2 { margin-bottom: 10px; }
+.mb-3 { margin-bottom: 15px; }
+.mb-4 { margin-bottom: 20px; }
+.mb-5 { margin-bottom: 25px; }
+
+.ml-0 { margin-left: 0; }
+.ml-1 { margin-left: 5px; }
+.ml-2 { margin-left: 10px; }
+.ml-3 { margin-left: 15px; }
+.ml-4 { margin-left: 20px; }
+.ml-5 { margin-left: 25px; }
+
+.mr-0 { margin-right: 0; }
+.mr-1 { margin-right: 5px; }
+.mr-2 { margin-right: 10px; }
+.mr-3 { margin-right: 15px; }
+.mr-4 { margin-right: 20px; }
+.mr-5 { margin-right: 25px; }
+
+.p-0 { padding: 0; }
+.p-1 { padding: 5px; }
+.p-2 { padding: 10px; }
+.p-3 { padding: 15px; }
+.p-4 { padding: 20px; }
+.p-5 { padding: 25px; }
+
+.pt-0 { padding-top: 0; }
+.pt-1 { padding-top: 5px; }
+.pt-2 { padding-top: 10px; }
+.pt-3 { padding-top: 15px; }
+.pt-4 { padding-top: 20px; }
+.pt-5 { padding-top: 25px; }
+
+.pb-0 { padding-bottom: 0; }
+.pb-1 { padding-bottom: 5px; }
+.pb-2 { padding-bottom: 10px; }
+.pb-3 { padding-bottom: 15px; }
+.pb-4 { padding-bottom: 20px; }
+.pb-5 { padding-bottom: 25px; }
+
+.pl-0 { padding-left: 0; }
+.pl-1 { padding-left: 5px; }
+.pl-2 { padding-left: 10px; }
+.pl-3 { padding-left: 15px; }
+.pl-4 { padding-left: 20px; }
+.pl-5 { padding-left: 25px; }
+
+.pr-0 { padding-right: 0; }
+.pr-1 { padding-right: 5px; }
+.pr-2 { padding-right: 10px; }
+.pr-3 { padding-right: 15px; }
+.pr-4 { padding-right: 20px; }
+.pr-5 { padding-right: 25px; }
+
+/* ========== TEXT UTILITIES ========== */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+.text-xs { font-size: 10px; }
+.text-sm { font-size: 12px; }
+.text-md { font-size: 14px; }
+.text-lg { font-size: 16px; }
+.text-xl { font-size: 18px; }
+.text-2xl { font-size: 20px; }
+.text-3xl { font-size: 24px; }
+.text-4xl { font-size: 28px; }
+
+.text-light { font-weight: 300; }
+.text-normal { font-weight: 400; }
+.text-medium { font-weight: 500; }
+.text-semibold { font-weight: 600; }
+.text-bold { font-weight: 700; }
+.text-bolder { font-weight: 800; }
+.text-black { font-weight: 900; }
+
+.text-primary { color: #1a365d; }
+.text-secondary { color: #64748b; }
+.text-success { color: #22c55e; }
+.text-danger { color: #ef4444; }
+.text-warning { color: #f59e0b; }
+.text-accent { color: #fbbf24; }
+.text-white { color: #ffffff; }
+.text-black { color: #000000; }
+
+/* ========== BACKGROUND UTILITIES ========== */
+.bg-primary { background-color: #1a365d; }
+.bg-secondary { background-color: #64748b; }
+.bg-success { background-color: #22c55e; }
+.bg-danger { background-color: #ef4444; }
+.bg-warning { background-color: #f59e0b; }
+.bg-accent { background-color: #fbbf24; }
+.bg-white { background-color: #ffffff; }
+.bg-light { background-color: #f8fafc; }
+.bg-dark { background-color: #1e293b; }
+.bg-transparent { background-color: transparent; }
+
+/* ========== BORDER UTILITIES ========== */
+.border { border: 1px solid #e2e8f0; }
+.border-top { border-top: 1px solid #e2e8f0; }
+.border-bottom { border-bottom: 1px solid #e2e8f0; }
+.border-left { border-left: 1px solid #e2e8f0; }
+.border-right { border-right: 1px solid #e2e8f0; }
+.border-0 { border: none; }
+
+.border-primary { border-color: #1a365d; }
+.border-accent { border-color: #fbbf24; }
+.border-success { border-color: #22c55e; }
+.border-danger { border-color: #ef4444; }
+
+.rounded { border-radius: 4px; }
+.rounded-md { border-radius: 8px; }
+.rounded-lg { border-radius: 12px; }
+.rounded-xl { border-radius: 16px; }
+.rounded-2xl { border-radius: 20px; }
+.rounded-full { border-radius: 9999px; }
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+.slide-in { animation: slideIn 0.3s ease; }
+.slide-left { animation: slideInLeft 0.3s ease; }
+.slide-right { animation: slideInRight 0.3s ease; }
+.pulse { animation: pulse 2s infinite; }
+.spin { animation: spin 1s linear infinite; }
+
+/* ========== TOGGLE SWITCH ========== */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #334155;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #fbbf24;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* ========== BADGE STYLES ========== */
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-primary { background: #1a365d; color: white; }
+.badge-accent { background: #fbbf24; color: #1a365d; }
+.badge-success { background: #22c55e; color: white; }
+.badge-danger { background: #ef4444; color: white; }
+.badge-warning { background: #f59e0b; color: white; }
+
+/* ========== RESPONSIVE UTILITIES ========== */
+@media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .hide-mobile {
+        display: none;
+    }
+    
+    .text-center-mobile {
+        text-align: center;
+    }
+    
+    .flex-column-mobile {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hide-tablet {
+        display: none;
+    }
+}
+
+@media (min-width: 1025px) {
+    .hide-desktop {
+        display: none;
+    }
+}

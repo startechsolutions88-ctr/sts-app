@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  :root {
+    --bg-color: #0B2B4F;
+    --text-color: #ffffff;
+    --accent: #fbbf24;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --input-bg: rgba(0, 0, 0, 0.3);
+  }
+
+  body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    margin: 0; padding: 20px;
+  }
+
+  /* CUSTOM TOAST NOTIFICATION */
+  #toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #1e293b;
+    color: #fff;
+    text-align: center;
+    border-radius: 12px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border: 1px solid var(--accent);
+  }
+
+  #toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+
+  @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+  @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 30px; }
+  .header i { color: var(--accent); font-size: 45px; margin-bottom: 10px; }
+  .header h2 { margin: 5px 0; font-size: 24px; }
+  .header p { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; }
+
+  /* TOGGLE CARD */
+  .toggle-card {
+    background: var(--card-bg); padding: 20px; border-radius: 20px;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  .toggle-info h4 { margin: 0; font-size: 18px; }
+  .toggle-info p { margin: 5px 0 0; font-size: 12px; color: #94a3b8; }
+
+  /* THE SWITCH */
+  .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #334155; transition: .4s; border-radius: 34px;
+  }
+  .slider:before {
+    position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px;
+    background-color: white; transition: .4s; border-radius: 50%;
+  }
+  input:checked + .slider { background-color: var(--accent); }
+  input:checked + .slider:before { transform: translateX(24px); }
+
+  /* TECH TIPS LIST */
+  .section-title { font-size: 13px; color: var(--accent); text-transform: uppercase; font-weight: 800; margin-bottom: 15px; display: block; }
+  
+  .tip-box {
+    background: var(--input-bg); padding: 15px; border-radius: 15px;
+    margin-bottom: 15px; display: flex; gap: 15px; align-items: flex-start;
+  }
+  .tip-box i { color: var(--accent); font-size: 20px; margin-top: 3px; }
+  .tip-text h5 { margin: 0; font-size: 15px; color: #fff; }
+  .tip-text p { margin: 5px 0 0; font-size: 12px; color: #cbd5e1; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+  <div id="toast">Message goes here</div>
+
+  <div class="header">
+    <i class="fas fa-database"></i>
+    <h2>Data Saver</h2>
+    <p>Optimize your STS Experience</p>
+  </div>
+
+  <div class="toggle-card">
+    <div class="toggle-info">
+      <h4>Lite Mode</h4>
+      <p>Reduces data usage by loading smaller images and disabling animations.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="dataSaverToggle" onchange="toggleDataSaver()">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <span class="section-title">Expert Tech Tips</span>
+
+  <div class="tip-box">
+    <i class="fas fa-wifi"></i>
+    <div class="tip-text">
+      <h5>Auto-Update over Wi-Fi</h5>
+      <p>Go to Play Store Settings > Network Preferences and set Auto-update apps to "Over Wi-Fi only".</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <i class="fas fa-file-download"></i>
+    <div class="tip-text">
+      <h5>WhatsApp Media Auto-Download</h5>
+      <p>Disable auto-download for photos and videos in WhatsApp Settings to save massive amounts of data.</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <i class="fas fa-braille"></i>
+    <div class="tip-text">
+      <h5>Data Compression</h5>
+      <p>Turn on "Data Saver" in your phone's System Settings to block background data for unused apps.</p>
+    </div>
+  </div>
+
+  <script>
+    // Load saved preference on startup
+    window.onload = function() {
+      // Syncing with 'sts_ds' used in the main menu toggle
+      const isEnabled = localStorage.getItem('sts_ds') === 'true';
+      document.getElementById('dataSaverToggle').checked = isEnabled;
+    };
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.innerText = message;
+      toast.className = "show";
+      setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+
+    function toggleDataSaver() {
+      const isChecked = document.getElementById('dataSaverToggle').checked;
+      
+      // Save state to localStorage for persistence across the app
+      localStorage.setItem('sts_ds', isChecked);
+      
+      // Professional feedback using custom toast
+      if(isChecked) {
+        showToast(" Lite Mode Enabled");
+      } else {
+        showToast("Visuals Restored");
+      }
+    }
+  </script>
+
+</body>
+</html>

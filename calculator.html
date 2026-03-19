@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: #f8fafc; 
+    margin: 0; 
+    padding-top: 90px; 
+    padding-bottom: 120px; 
+    color: #1e293b; 
+  }
+
+  .header-fixed {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #ffffff;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  .header-fixed h2 { color: #1a365d; font-size: 18px; margin: 0; font-weight: 800; }
+  .header-fixed p { color: #64748b; font-size: 11px; margin: 5px 0 0 0; font-weight: bold; }
+
+  .content { padding: 0 15px; }
+
+  .cat-title { 
+    display: block; background: #e2e8f0; color: #1a365d;
+    padding: 10px; margin: 20px 0 10px 0; border-radius: 8px;
+    font-size: 11px; font-weight: 900; text-transform: uppercase;
+    border-left: 5px solid #1a365d;
+  }
+
+  .row { 
+    display: flex; align-items: center; justify-content: space-between; 
+    padding: 12px; background: white; margin-bottom: 5px; border-radius: 8px;
+    border: 1px solid #edf2f7;
+  }
+
+  .row label { font-size: 13px; font-weight: 600; flex: 1; }
+  .row span { font-size: 12px; color: #64748b; margin-right: 15px; font-weight: bold; }
+  
+  input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: #22c55e; }
+
+  .footer-fixed { 
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a365d; padding: 20px;
+    border-radius: 20px 20px 0 0; text-align: center;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.2); z-index: 1000;
+  }
+
+  .footer-fixed label { color: white; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  #total { font-size: 32px; font-weight: 900; color: #fbbf24; display: block; margin-bottom: 10px; }
+  
+  .call-btn { 
+    display: block; background: #22c55e; color: white; 
+    text-decoration: none; padding: 12px; border-radius: 10px;
+    font-weight: 800; font-size: 15px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header-fixed">
+    <h2><i class="fas fa-calculator"></i> Price Estimator</h2>
+    <p>Star Tech Solutions Ltd 2026 prices</p>
+  </div>
+
+  <div class="content">
+    <div class="cat-title">Smart Phones</div>
+    <div class="row"><label>Complete Screen</label><span>K650</span><input type="checkbox" class="svc" data-p="650" onchange="run()"></div>
+    <div class="row"><label>Dead PCB</label><span>K300</span><input type="checkbox" class="svc" data-p="300" onchange="run()"></div>
+    <div class="row"><label>Internal Battery</label><span>K250</span><input type="checkbox" class="svc" data-p="250" onchange="run()"></div>
+    <div class="row"><label>Touch Replacement</label><span>K230</span><input type="checkbox" class="svc" data-p="230" onchange="run()"></div>
+    <div class="row"><label>Charging (Type-C)</label><span>K150</span><input type="checkbox" class="svc" data-p="150" onchange="run()"></div>
+    <div class="row"><label>Flashing / Water Damage</label><span>K150</span><input type="checkbox" class="svc" data-p="150" onchange="run()"></div>
+    <div class="row"><label>Mouthpiece / Network</label><span>K100</span><input type="checkbox" class="svc" data-p="100" onchange="run()"></div>
+    <div class="row"><label>Common Charging System</label><span>K90</span><input type="checkbox" class="svc" data-p="90" onchange="run()"></div>
+
+    <div class="cat-title">Computers & Laptops</div>
+    <div class="row"><label>Data Recovery</label><span>K1000</span><input type="checkbox" class="svc" data-p="1000" onchange="run()"></div>
+    <div class="row"><label>Short Circuits Repair</label><span>K800</span><input type="checkbox" class="svc" data-p="800" onchange="run()"></div>
+    <div class="row"><label>Laptop Screen</label><span>K700</span><input type="checkbox" class="svc" data-p="700" onchange="run()"></div>
+    <div class="row"><label>Laptop Keyboard</label><span>K600</span><input type="checkbox" class="svc" data-p="600" onchange="run()"></div>
+    <div class="row"><label>Windows 7, 8, 10 & 11</label><span>K200</span><input type="checkbox" class="svc" data-p="200" onchange="run()"></div>
+    <div class="row"><label>Virus Removal</label><span>K150</span><input type="checkbox" class="svc" data-p="150" onchange="run()"></div>
+
+    <div class="cat-title">Small Phones</div>
+    <div class="row"><label>Large Screen</label><span>K150</span><input type="checkbox" class="svc" data-p="150" onchange="run()"></div>
+    <div class="row"><label>Small Screen</label><span>K80</span><input type="checkbox" class="svc" data-p="80" onchange="run()"></div>
+    <div class="row"><label>Battery / Flashing</label><span>K60</span><input type="checkbox" class="svc" data-p="60" onchange="run()"></div>
+    <div class="row"><label>Basic Components</label><span>K30</span><input type="checkbox" class="svc" data-p="30" onchange="run()"></div>
+    
+    <div class="row"><label>Charhing System</label><span>K30</span><input type="checkbox" class="svc" data-p="30" onchange="run()"></div>
+    <div class="row"><label>Speaker</label><span>K30</span><input type="checkbox" class="svc" data-p="30" onchange="run()"></div>
+    <div class="row"><label>Dead PCB </ Flashing</label><span>K50</span><input type="checkbox" class="svc" data-p="50" onchange="run()"></div>
+  </div>
+
+  <div class="footer-fixed">
+    <label>Estimated Total</label>
+    <span id="total">K0</span>
+    <a href="go:Contact Us" class="call-btn"><i class="fas fa-phone-alt"></i> CONTACT US</a>
+  </div>
+
+<script>
+function run() {
+  let val = 0;
+  let checks = document.getElementsByClassName('svc');
+  for (let i = 0; i < checks.length; i++) {
+    if (checks[i].checked) {
+      val += parseInt(checks[i].getAttribute('data-p'));
+    }
+  }
+  document.getElementById('total').innerText = "K" + val.toLocaleString();
+}
+</script>
+
+</body>
+</html>

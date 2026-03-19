@@ -1,0 +1,405 @@
+/**
+ * STS Theme Styles v1.0
+ * Dark mode and theme-specific styles
+ * Include after sts-base.css: <link rel="stylesheet" href="sts-theme.css">
+ */
+
+/* ========== DARK MODE BASE ========== */
+.dark-mode {
+    background-color: #121212 !important;
+    color: #ffffff !important;
+}
+
+/* ========== CARD & CONTAINER STYLES ========== */
+.dark-mode .card,
+.dark-mode .service-card,
+.dark-mode .content-section,
+.dark-mode .setting-group,
+.dark-mode .toggle-card,
+.dark-mode .tip-box,
+.dark-mode .nav-item,
+.dark-mode .btn:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):not(.btn-accent),
+.dark-mode .contact-card,
+.dark-mode .product-card,
+.dark-mode .appointment-card,
+.dark-mode .modal-box,
+.dark-mode .header-fixed,
+.dark-mode .footer-fixed,
+.dark-mode .part-box,
+.dark-mode .vital-card,
+.dark-mode .stat-box,
+.dark-mode .row,
+.dark-mode .setting-row,
+.dark-mode .booking-form,
+.dark-mode .innovator-card,
+.dark-mode .use-case,
+.dark-mode .search-box,
+.dark-mode .notif-header,
+.dark-mode .settings-header,
+.dark-mode .calculator-row,
+.dark-mode .notice-card,
+.dark-mode .feature-box,
+.dark-mode .calculator-row {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+}
+
+/* ========== TEXT COLORS ========== */
+.dark-mode p,
+.dark-mode span:not(.vital-val):not(.stat-num):not(.price):not(.badge-count):not(.logo-text):not(.tagline):not(.hot-label),
+.dark-mode .info-text,
+.dark-mode .footer-note,
+.dark-mode .part-status,
+.dark-mode .stat-label,
+.dark-mode .setting-info p,
+.dark-mode .toggle-info p,
+.dark-mode .tip-text p,
+.dark-mode .notice-body,
+.dark-mode .mission-footer,
+.dark-mode .footer,
+.dark-mode .price-note,
+.dark-mode .calculator-row span,
+.dark-mode .search-box input::placeholder {
+    color: #aaa !important;
+}
+
+/* ========== HEADINGS ========== */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+    color: #fbbf24 !important;
+}
+
+.dark-mode .page-title,
+.dark-mode .section-title,
+.dark-mode .cat-title,
+.dark-mode .logo-text,
+.dark-mode .tagline,
+.dark-mode .contact-title,
+.dark-mode .lab-header h2,
+.dark-mode .settings-header h2,
+.dark-mode .data-saver-header h2,
+.dark-mode .reminder-header h2,
+.dark-mode .projector-header h2 {
+    color: #fbbf24 !important;
+}
+
+.dark-mode .cat-title {
+    background-color: #2a2a2a !important;
+    border-left-color: #fbbf24 !important;
+}
+
+/* ========== LINK STYLES ========== */
+.dark-mode a:not(.btn):not(.nav-item) {
+    color: #bb86fc !important;
+}
+
+/* ========== BUTTON STYLES ========== */
+.dark-mode .btn-primary,
+.dark-mode .btn-main,
+.dark-mode .call-support {
+    background-color: #333 !important;
+    color: #fff !important;
+    border-color: #555 !important;
+}
+
+.dark-mode .btn-doctor {
+    background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%) !important;
+    border-color: #7f1d1d !important;
+}
+
+.dark-mode .btn-estimator {
+    background: linear-gradient(135deg, #b45309 0%, #92400e 100%) !important;
+    border-color: #92400e !important;
+}
+
+.dark-mode .btn-success,
+.dark-mode .btn-call,
+.dark-mode .call-btn {
+    background-color: #22c55e !important;
+}
+
+.dark-mode .btn-outline {
+    border-color: #fbbf24 !important;
+    color: #fbbf24 !important;
+}
+
+.dark-mode .btn-danger {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+}
+
+/* ========== HEADER & FOOTER ========== */
+.dark-mode .home-header,
+.dark-mode .header,
+.dark-mode .header-fixed,
+.dark-mode .settings-header,
+.dark-mode .search-container,
+.dark-mode .notif-header,
+.dark-mode .services-header,
+.dark-mode .footer-fixed {
+    background-color: #1e1e1e !important;
+    border-bottom-color: #333 !important;
+}
+
+.dark-mode .footer-fixed {
+    background-color: #1a1a1a !important;
+}
+
+.dark-mode .search-container {
+    background: #1a1a1a !important;
+}
+
+/* ========== FORM ELEMENTS ========== */
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background-color: #333 !important;
+    color: #fff !important;
+    border-color: #555 !important;
+}
+
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+    color: #888 !important;
+}
+
+.dark-mode select option {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+/* ========== SPECIAL ELEMENTS ========== */
+.dark-mode .icon-box {
+    background-color: #fbbf24 !important;
+    color: #121212 !important;
+}
+
+.dark-mode .passed {
+    background-color: rgba(74, 222, 128, 0.2) !important;
+    border-color: #4ade80 !important;
+}
+
+.dark-mode .badge-count {
+    background-color: #ef4444 !important;
+    color: #fff !important;
+}
+
+.dark-mode .hot-label {
+    background-color: #333 !important;
+    color: #fbbf24 !important;
+}
+
+.dark-mode .stat-num,
+.dark-mode .price,
+.dark-mode .vital-val,
+.dark-mode #total {
+    color: #4ade80 !important;
+}
+
+.dark-mode .delete-btn {
+    color: #ef4444 !important;
+}
+
+.dark-mode .slider {
+    background-color: #555 !important;
+}
+
+.dark-mode input:checked + .slider {
+    background-color: #fbbf24 !important;
+}
+
+/* ========== DOCTOR PAGE SPECIFIC ========== */
+.dark-mode .doctor-body,
+.dark-mode body:has(.lab-header) {
+    background-color: #121212 !important;
+}
+
+.dark-mode .scanner-ring {
+    border-color: #fbbf24;
+}
+
+/* ========== OVERLAY STYLES ========== */
+.dark-mode #touch-test-overlay,
+.dark-mode #scan-overlay,
+.dark-mode .modal-overlay {
+    background-color: rgba(18, 18, 18, 0.95) !important;
+}
+
+.dark-mode .modal-box {
+    background-color: #2a2a2a !important;
+    border-color: #fbbf24 !important;
+}
+
+/* ========== TOAST NOTIFICATION ========== */
+.dark-mode #toast {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+    border-color: #fbbf24 !important;
+}
+
+/* ========== DATA SAVER MODE ========== */
+body[data-saver="true"] img {
+    filter: blur(2px);
+    transition: filter 0.3s;
+}
+
+body[data-saver="true"] img:hover {
+    filter: blur(0);
+}
+
+body[data-saver="true"] .animated,
+body[data-saver="true"] .scanner-ring,
+body[data-saver="true"] .ping,
+body[data-saver="true"] .pulse {
+    animation: none !important;
+}
+
+/* ========== STORE PAGE ========== */
+.dark-mode .product-card .price {
+    color: #4ade80 !important;
+}
+
+/* ========== SERVICES PAGE ========== */
+.dark-mode .service-info h3 {
+    color: #fbbf24 !important;
+}
+
+.dark-mode .service-info p {
+    color: #aaa !important;
+}
+
+/* ========== MORE PAGE ========== */
+.dark-mode .nav-item:active {
+    background-color: rgba(251, 191, 36, 0.2) !important;
+}
+
+.dark-mode .nav-item i {
+    color: #fbbf24;
+}
+
+/* ========== NOTICES PAGE ========== */
+.dark-mode .notice-card {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+}
+
+.dark-mode .notice-title {
+    color: #fbbf24 !important;
+}
+
+/* ========== PROJECTOR PAGE ========== */
+.dark-mode .projector-body,
+.dark-mode body:has(.projector-header) {
+    background-color: #121212 !important;
+}
+
+.dark-mode .innovator-card {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a) !important;
+}
+
+.dark-mode .feature-box {
+    background-color: #2a2a2a !important;
+}
+
+.dark-mode .use-case {
+    background-color: #2a2a2a !important;
+}
+
+.dark-mode .vision-box {
+    border-top-color: #fbbf24 !important;
+}
+
+/* ========== REMINDER PAGE ========== */
+.dark-mode .reminder-body,
+.dark-mode body:has(.reminder-header) {
+    background-color: #121212 !important;
+}
+
+.dark-mode .appointment-card {
+    background-color: #2a2a2a !important;
+    border-left-color: #fbbf24 !important;
+}
+
+.dark-mode .appointment-card h4 {
+    color: #fbbf24 !important;
+}
+
+.dark-mode .ping {
+    background-color: #ef4444;
+}
+
+/* ========== CALCULATOR PAGE ========== */
+.dark-mode .calculator-body,
+.dark-mode body:has(.calculator-content) {
+    background-color: #121212 !important;
+}
+
+.dark-mode .header-fixed p {
+    color: #aaa !important;
+}
+
+/* ========== CONTACT PAGE ========== */
+.dark-mode .contact-body,
+.dark-mode body:has(.contact-card) {
+    background-color: #121212 !important;
+}
+
+.dark-mode .contact-title {
+    color: #fbbf24 !important;
+}
+
+.dark-mode .info-text {
+    color: #aaa !important;
+}
+
+.dark-mode .shop-id {
+    color: #fbbf24 !important;
+}
+
+/* ========== DATA SAVER PAGE ========== */
+.dark-mode .data-saver-body,
+.dark-mode body:has(.toggle-card) {
+    background-color: #121212 !important;
+}
+
+.dark-mode .toggle-info p,
+.dark-mode .tip-text p {
+    color: #aaa !important;
+}
+
+/* ========== SCROLLBAR STYLES ========== */
+.dark-mode ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 5px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* ========== PRINT STYLES ========== */
+@media print {
+    .dark-mode {
+        background-color: white !important;
+        color: black !important;
+    }
+    
+    .dark-mode .card,
+    .dark-mode .header-fixed,
+    .dark-mode .footer-fixed {
+        background-color: white !important;
+        border: 1px solid #ddd !important;
+    }
+}

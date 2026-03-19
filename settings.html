@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  :root {
+    --bg-color: #0B2B4F;
+    --text-color: #ffffff;
+    --accent: #fbbf24;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    margin: 0; padding: 0;
+    padding-bottom: 40px;
+  }
+
+  .settings-header {
+    padding: 25px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background: var(--bg-color);
+    z-index: 100;
+  }
+  .settings-header h2 { margin: 0; font-size: 20px; }
+
+  .section-label {
+    padding: 20px 20px 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .setting-group {
+    background: var(--card-bg);
+    margin: 0 15px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  .setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+  }
+  .setting-row:last-child { border-bottom: none; }
+  
+  .setting-info { flex: 1; padding-right: 10px; }
+  .setting-info h4 { margin: 0; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .setting-info p { margin: 3px 0 0; font-size: 11px; color: #94a3b8; }
+
+  select {
+    background: #1e293b;
+    color: var(--accent);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px;
+    font-weight: bold;
+    outline: none;
+  }
+
+  /* Toggle Switch styling */
+  .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #334155; transition: .4s; border-radius: 20px;
+  }
+  .slider:before {
+    position: absolute; content: ""; height: 14px; width: 14px;
+    left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%;
+  }
+  input:checked + .slider { background-color: var(--accent); }
+  input:checked + .slider:before { transform: translateX(20px); }
+
+  .btn-danger {
+    margin: 20px 15px;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    background: transparent;
+    width: calc(100% - 30px);
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+  <div class="settings-header">
+    <i class="fas fa-arrow-left" onclick="window.history.back()"></i>
+    <h2>App Settings</h2>
+  </div>
+
+  <div class="section-label">Regional & Display</div>
+  <div class="setting-group">
+    <div class="setting-row">
+      <div class="setting-info">
+        <h4><i class="fas fa-moon"></i> Dark Mode</h4>
+        <p>Use dark theme for the interface</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="darkMode" checked onchange="updatePref('sts_dark_mode', this.checked)">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info">
+        <h4><i class="fas fa-globe"></i> Language</h4>
+        <p>International language support</p>
+      </div>
+      <select id="langSelect" onchange="updatePref('sts_lang', this.value)"></select>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info">
+        <h4><i class="fas fa-coins"></i> Currency</h4>
+        <p>2026 Price List conversion</p>
+      </div>
+      <select id="currencySelect" onchange="updatePref('sts_currency', this.value)">
+        <option value="ZMW">ZMW (K)</option>
+        <option value="USD">USD ($)</option>
+        <option value="ZAR">ZAR (R)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section-label">Optimization</div>
+  <div class="setting-group">
+    <div class="setting-row">
+      <div class="setting-info">
+        <h4><i class="fas fa-database"></i> Data Saver</h4>
+        <p>Reduce data usage during sync</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="dataSaver" onchange="updatePref('sts_data_saver', this.checked)">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="setting-row" onclick="alert('Cache Cleared!')">
+      <div class="setting-info">
+        <h4><i class="fas fa-broom"></i> Smart Cleanup</h4>
+        <p>Clear diagnostic cache</p>
+      </div>
+      <i class="fas fa-chevron-right" style="opacity:0.3"></i>
+    </div>
+  </div>
+
+  <div class="section-label">Legal & Policy</div>
+  <div class="setting-group">
+    <div class="setting-row" onclick="window.location.href='go:PrivacyPolicy'">
+      <div class="setting-info">
+      <h4><i class="fas fa-user-shield"></i> <a href="https://www.e-droid.net/privacy.php?ida=3933272&idl=en">  Privacy Policy</a></h4>
+        <p>How we handle your data</p>
+      </div>
+      <i class="fas fa-chevron-right" style="opacity:0.3"></i>
+    </div>
+    <div class="setting-row" onclick="window.location.href='go:Terms'">
+      <div class="setting-info">
+        <h4><i class="fas fa-file-contract"></i> Terms of Service</h4>
+        <p>Standard operating terms</p>
+      </div>
+      <i class="fas fa-chevron-right" style="opacity:0.3"></i>
+    </div>
+  </div>
+
+  <div class="section-label">About Star Tech Solutions</div>
+  <div class="setting-group">
+    <div class="setting-row">
+      <div class="setting-info">
+        <h4>App Version</h4>
+        <p>v1.0 STS</p>
+      </div>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info">
+        <h4>Headquarters</h4>
+        <p>Nakambala Market, Mazabuka</p>
+      </div>
+      <i class="fas fa-map-marked-alt" style="color:var(--accent)"></i>
+    </div>
+  </div>
+
+  <button class="btn-danger" onclick="confirmReset()">RESET ALL APP DATA</button>
+
+<script>
+const langMap = { en: "English", es: "Español", fr: "Français", pt: "Português", zh: "中文" };
+
+function init() {
+  const select = document.getElementById('langSelect');
+  for (const [code, name] of Object.entries(langMap)) {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.innerText = name;
+    select.appendChild(opt);
+  }
+  
+  // Load saved preferences
+  document.getElementById('langSelect').value = localStorage.getItem('sts_lang') || 'en';
+  document.getElementById('currencySelect').value = localStorage.getItem('sts_currency') || 'ZMW';
+  document.getElementById('darkMode').checked = localStorage.getItem('sts_dark_mode') !== 'false';
+  document.getElementById('dataSaver').checked = localStorage.getItem('sts_data_saver') === 'true';
+}
+
+function updatePref(key, val) {
+  localStorage.setItem(key, val);
+}
+
+function confirmReset() {
+  if(confirm("Delete all Star Tech Solutions app data?")) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+init();
+</script>
+</body>
+</html>

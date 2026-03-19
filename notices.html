@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: linear-gradient(180deg, #0B2B4F 0%, #64748b 100%); 
+    margin: 0; padding: 15px; color: white; min-height: 100vh;
+  }
+
+  /* Header */
+  .notif-header {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .badge-count {
+    background: #ff4757; color: white; border-radius: 50%;
+    padding: 2px 8px; font-size: 14px; font-weight: bold; margin-left: 8px;
+  }
+  .clear-btn { font-size: 12px; color: #fbbf24; cursor: pointer; font-weight: bold; }
+
+  /* Cards */
+  .card {
+    background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+    border-radius: 15px; padding: 18px; margin-bottom: 15px;
+    position: relative; border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .unread { border-left: 5px solid #fbbf24; }
+  
+  /* Delete Icon */
+  .delete-btn {
+    position: absolute; right: 15px; top: 15px;
+    color: rgba(255,255,255,0.4); font-size: 18px; cursor: pointer;
+    padding: 5px;
+  }
+  .delete-btn:hover { color: #ff4757; }
+
+  .title { font-weight: bold; color: #fbbf24; display: block; margin-bottom: 5px; padding-right: 25px; }
+  .body-text { font-size: 14px; opacity: 0.9; }
+</style>
+</head>
+<body>
+
+  <div class="notif-header">
+    <div>Notices <span id="main-count" class="badge-count">0</span></div>
+    <div class="clear-btn" onclick="clearAll()">Clear All</div>
+  </div>
+
+  <div id="notices-container">
+    <div class="card unread" id="notif_1" onclick="markAsRead('notif_1')">
+      <i class="fas fa-times delete-btn" onclick="deleteNotice(event, 'notif_1')"></i>
+      <span class="title">System Update</span>
+      <span class="body-text">Individual delete is now active. Tap the X to remove this notice!</span>
+    </div>
+
+    <div class="card unread" id="notif_2" onclick="markAsRead('notif_2')">
+      <i class="fas fa-times delete-btn" onclick="deleteNotice(event, 'notif_2')"></i>
+      <span class="title">New Repair Tools</span>
+      <span class="body-text">We just received new diagnostic gear for faster laptop repairs in Mazabuka.</span>
+    </div>
+  </div>
+
+<script>
+  const READ_KEY = 'sts_read_v2';
+  const DEL_KEY = 'sts_del_v2';
+
+  function updateCounter() {
+    const visibleUnread = document.querySelectorAll('.card.unread:not([style*="display: none"])').length;
+    const countEl = document.getElementById('main-count');
+    countEl.innerText = visibleUnread;
+    countEl.style.display = visibleUnread > 0 ? 'inline-block' : 'none';
+  }
+
+  function markAsRead(id) {
+    const el = document.getElementById(id);
+    if (el && el.classList.contains('unread')) {
+      el.classList.remove('unread');
+      let read = JSON.parse(localStorage.getItem(READ_KEY) || "[]");
+      if (!read.includes(id)) { read.push(id); localStorage.setItem(READ_KEY, JSON.stringify(read)); }
+      updateCounter();
+    }
+  }
+
+  function deleteNotice(event, id) {
+    event.stopPropagation(); // Prevents marking as read when clicking X
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.style.display = 'none';
+        let deleted = JSON.parse(localStorage.getItem(DEL_KEY) || "[]");
+        if (!deleted.includes(id)) { deleted.push(id); localStorage.setItem(DEL_KEY, JSON.stringify(deleted)); }
+        updateCounter();
+      }, 200);
+    }
+  }
+
+  function clearAll() {
+    document.querySelectorAll('.card.unread').forEach(card => markAsRead(card.id));
+  }
+
+  window.onload = function() {
+    let read = JSON.parse(localStorage.getItem(READ_KEY) || "[]");
+    let deleted = JSON.parse(localStorage.getItem(DEL_KEY) || "[]");
+    
+    deleted.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+    read.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('unread'); });
+    
+    updateCounter();
+  };
+</script>
+</body>
+</html>

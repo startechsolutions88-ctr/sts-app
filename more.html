@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  :root {
+    --bg-color: #0B2B4F;
+    --text-color: #ffffff;
+    --accent: #fbbf24;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
+  }
+
+  body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    margin: 0; 
+  }
+
+  /* SEARCH BAR */
+  .search-container { padding: 20px; background: rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; }
+  .search-box {
+    display: flex; align-items: center; background: var(--card-bg);
+    padding: 12px 15px; border-radius: 12px; border: 1px solid var(--accent);
+  }
+  .search-box input {
+    background: transparent; border: none; color: white; margin-left: 10px; outline: none; width: 100%; font-size: 16px;
+  }
+
+  /* NAVIGATION LIST */
+  .nav-list { padding: 10px 0; }
+  .nav-item {
+    display: flex; align-items: center; padding: 18px 25px;
+    text-decoration: none; color: var(--text-color);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-item:active { background: rgba(251, 191, 36, 0.1); }
+  .nav-item i { width: 35px; font-size: 20px; color: var(--accent); }
+  .nav-item span { font-size: 16px; font-weight: 500; flex: 1; }
+
+  .footer { text-align: center; padding: 40px 20px; opacity: 0.4; font-size: 10px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+  <div class="search-container">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="menuSearch" onkeyup="filterMenu()" placeholder="Search tools...">
+    </div>
+  </div>
+
+  <div class="nav-list" id="mainMenu">
+    <a href="go:Tech Tips" class="nav-item">
+      <i class="fas fa-lightbulb"></i>
+      <span>Expert Tech Tip</span>
+    </a>
+
+     <a href="go:HM2" class="nav-item">
+      <i class="fas fa-microchip"></i>
+      <span>HM2 Project</span>
+    </a>
+
+    <a href="go:Reminders" class="nav-item">
+      <i class="fas fa-bell"></i>
+      <span>Reminder</span>
+    </a>
+
+    
+
+    <a href="go:Settings" class="nav-item">
+      <i class="fas fa-cog"></i>
+      <span>Settings</span>
+    </a>
+  </div>
+<a href="go:About Us" class="nav-item">
+      <i class="fas fa-info-circle"></i>
+      <span>About Us</span>
+    </a>
+  <div class="footer">
+    STAR TECH SOLUTIONS LTD
+  </div>
+
+  <script>
+    function filterMenu() {
+      let input = document.getElementById('menuSearch');
+      let filter = input.value.toLowerCase();
+      let items = document.getElementsByClassName('nav-item');
+      
+      for (let i = 0; i < items.length; i++) {
+        let text = items[i].textContent || items[i].innerText;
+        if (text.toLowerCase().includes(filter)) {
+          items[i].style.display = "flex";
+        } else {
+          items[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

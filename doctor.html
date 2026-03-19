@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background: #0B2B4F; margin: 0; padding: 15px; color: white; overflow-x: hidden; }
+  
+  /* Header & Scanner */
+  .lab-header { text-align: center; margin-bottom: 20px; }
+  .scanner-ring {
+    width: 70px; height: 70px; border: 3px solid #fbbf24; border-radius: 50%;
+    margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
+    position: relative; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); } 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); } }
+
+  /* Vitals */
+  .vitals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+  .vital-card { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; text-align: center; font-size: 10px; }
+  .vital-val { display: block; font-size: 16px; font-weight: bold; color: #4ade80; }
+
+  /* Grid */
+  .tester-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .part-box {
+    background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px;
+    border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; position: relative;
+  }
+  .part-box i { font-size: 20px; color: #fbbf24; margin-bottom: 5px; }
+  .part-name { font-size: 12px; font-weight: bold; display: block; }
+  .part-status { font-size: 10px; color: #94a3b8; }
+  .passed { border-color: #4ade80 !important; background: rgba(74, 222, 128, 0.1) !important; color: #4ade80 !important; }
+
+  /* Touch Overlay */
+  #touch-test-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #0B2B4F; z-index: 2000; padding: 20px; box-sizing: border-box;
+  }
+  .touch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; height: 80vh; }
+  .touch-box { background: rgba(255,255,255,0.1); border-radius: 4px; }
+  .touch-box.active { background: #4ade80; }
+
+  /* Virus Scan Overlay */
+  #scan-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(11, 43, 79, 0.95); z-index: 2000; text-align: center; padding-top: 100px;
+  }
+  .progress-bar { width: 80%; background: #1e293b; height: 10px; border-radius: 5px; margin: 20px auto; overflow: hidden; }
+  .progress-fill { height: 100%; background: #fbbf24; width: 0%; transition: 0.3s; }
+</style>
+</head>
+<body>
+
+  <div class="lab-header">
+    <div class="scanner-ring"><i class="fas fa-stethoscope"></i></div>
+    <h2 style="margin:0;">DIAGNOSTIC LAB</h2>
+    <p style="font-size: 11px; opacity: 0.8; font-weight: 600; margin-top: 5px; letter-spacing: 0.5px;">
+      Star Tech Solutions Ltd Technical Team 
+    </p>
+  </div>
+
+  <div class="vitals">
+    <div class="vital-card"><span class="vital-val" id="v-bat">--%</span>BATTERY</div>
+    <div class="vital-card"><span class="vital-val" id="v-net">Checking</span>NETWORK</div>
+    <div class="vital-card"><span class="vital-val" style="color:#fbbf24;">32°C</span>TEMP</div>
+  </div>
+
+  <div class="tester-grid">
+    <div class="part-box" id="box-port"><i class="fas fa-bolt"></i><span class="part-name">Charging Port</span><span class="part-status" id="s-port">Detecting...</span></div>
+    <div class="part-box" onclick="startTouchTest()"><i class="fas fa-hand-pointer"></i><span class="part-name">Touch Screen</span><span class="part-status" id="s-touch">Start Grid Test</span></div>
+    <div class="part-box" onclick="testCamera()"><i class="fas fa-camera"></i><span class="part-name">Camera Test</span><span class="part-status" id="s-cam">Open Lens</span></div>
+    <div class="part-box" onclick="testAudio()"><i class="fas fa-volume-up"></i><span class="part-name">Audio/Speaker</span><span class="part-status" id="s-audio">Play Tone</span></div>
+    <div class="part-box" onclick="testSoftware()"><i class="fas fa-code-branch"></i><span class="part-name">Software OS</span><span class="part-status" id="s-soft">Verify System</span></div>
+    <div class="part-box" onclick="startVirusScan()"><i class="fas fa-shield-virus"></i><span class="part-name">Virus Scan</span><span class="part-status" id="s-virus">Deep Clean</span></div>
+  </div>
+
+  <a href="go:Contact Us" style="display:block; background:#fbbf24; color:#0B2B4F; text-align:center; padding:15px; margin-top:20px; border-radius:12px; font-weight:bold; text-decoration:none;">GET REPAIR REPORT</a>
+
+  <div id="touch-test-overlay">
+    <h3>Tap every box to test touch</h3>
+    <div class="touch-grid" id="touch-grid"></div>
+    <button onclick="closeTouch()" style="width:100%; padding:15px; margin-top:10px; background:#ef4444; color:white; border:none; border-radius:8px;">Exit Test</button>
+  </div>
+
+  <div id="scan-overlay">
+    <i class="fas fa-shield-alt" style="font-size:50px; color:#fbbf24;"></i>
+    <h3 id="scan-txt">Initializing Deep Scan...</h3>
+    <div class="progress-bar"><div class="progress-fill" id="scan-fill"></div></div>
+    <p id="scan-detail" style="font-size:12px; opacity:0.7;">Checking System Directories...</p>
+  </div>
+
+<script>
+  // 1. Charging Port & Battery
+  if ('getBattery' in navigator) {
+    navigator.getBattery().then(battery => {
+      const update = () => {
+        document.getElementById('v-bat').innerText = Math.round(battery.level * 100) + "%";
+        document.getElementById('s-port').innerText = battery.charging ? "CHARGING OK" : "NOT CHARGING";
+        document.getElementById('box-port').className = battery.charging ? "part-box passed" : "part-box";
+      };
+      update(); battery.onlevelchange = update; battery.onchargingchange = update;
+    });
+  }
+
+  // 2. Network Check
+  const updateNet = () => { document.getElementById('v-net').innerText = navigator.onLine ? "Online" : "Offline"; };
+  updateNet(); window.ononline = updateNet; window.onoffline = updateNet;
+
+  // 3. Touch Grid Test (5x5)
+  function startTouchTest() {
+    const grid = document.getElementById('touch-grid');
+    grid.innerHTML = '';
+    document.getElementById('touch-test-overlay').style.display = 'block';
+    for (let i = 0; i < 25; i++) {
+      const box = document.createElement('div');
+      box.className = 'touch-box';
+      box.onclick = function() { 
+        this.classList.add('active'); 
+        if(document.querySelectorAll('.touch-box.active').length === 25) {
+          setTimeout(closeTouch, 500);
+          document.getElementById('s-touch').innerText = "TOUCH PASSED";
+          document.getElementById('s-touch').parentElement.classList.add('passed');
+        }
+      };
+      grid.appendChild(box);
+    }
+  }
+  function closeTouch() { document.getElementById('touch-test-overlay').style.display = 'none'; }
+
+  // 4. Camera Test
+  async function testCamera() {
+    document.getElementById('s-cam').innerText = "OPENING...";
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+      document.getElementById('s-cam').innerText = "LENS PASSED";
+      document.getElementById('s-cam').parentElement.classList.add('passed');
+      setTimeout(() => stream.getTracks().forEach(t => t.stop()), 4000);
+    } catch (e) { document.getElementById('s-cam').innerText = "FAILED/DENIED"; }
+  }
+
+  // 5. Audio Test
+  function testAudio() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    osc.connect(audioCtx.destination);
+    osc.start();
+    document.getElementById('s-audio').innerText = "PLAYING TONE...";
+    setTimeout(() => { 
+        osc.stop(); 
+        document.getElementById('s-audio').innerText = "AUDIO PASSED";
+        document.getElementById('s-audio').parentElement.classList.add('passed');
+    }, 2000);
+  }
+
+  // 6. Virus Scan Simulation
+  function startVirusScan() {
+    document.getElementById('scan-overlay').style.display = 'block';
+    let p = 0;
+    const stages = ["Scanning Cache...", "Checking APKs...", "Scanning OS Files...", "Google Safe Browsing Audit...", "Clean!"];
+    const int = setInterval(() => {
+      p += 5;
+      document.getElementById('scan-fill').style.width = p + "%";
+      document.getElementById('scan-txt').innerText = "Scanning... " + p + "%";
+      document.getElementById('scan-detail').innerText = stages[Math.floor(p/25)];
+      if(p >= 100) {
+        clearInterval(int);
+        setTimeout(() => {
+          document.getElementById('scan-overlay').style.display = 'none';
+          document.getElementById('s-virus').innerText = "SYSTEM CLEAN";
+          document.getElementById('s-virus').parentElement.classList.add('passed');
+        }, 1000);
+      }
+    }, 150);
+  }
+
+  // 7. Software Test
+  function testSoftware() {
+    document.getElementById('s-soft').innerText = "AUDITING...";
+    setTimeout(() => {
+      document.getElementById('s-soft').innerText = "STABLE";
+      document.getElementById('s-soft').parentElement.classList.add('passed');
+    }, 2000);
+  }
+</script>
+</body>
+</html>
