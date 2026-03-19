@@ -1,7 +1,8 @@
 /**
- * STS Settings Library v3.0
- * Handles Dark Mode, Language Translation, Currency Formatting, and Data Saver
- * Include in all pages: <script src="sts-settings.js"></script>
+ * STS Settings Library v3.1
+ * Handles Dark Mode, Language Translation, Currency Formatting, Data Saver
+ * Includes custom toast and confirm dialogs
+ * Include after sts-translations.js
  */
 
 (function() {
@@ -14,35 +15,19 @@
         DEFAULT_DARK_MODE: false,
         DEFAULT_DATA_SAVER: false,
         CURRENCY_SYMBOLS: {
-            // Major currencies
             'ZMW': 'K', 'USD': '$', 'EUR': '€', 'GBP': '£', 'JPY': '¥', 
             'CNY': '¥', 'INR': '₹', 'RUB': '₽', 'CAD': 'C$', 'AUD': 'A$',
             'CHF': 'Fr', 'HKD': 'HK$', 'SGD': 'S$', 'NZD': 'NZ$', 'KRW': '₩',
-            
-            // African currencies
             'ZAR': 'R', 'NGN': '₦', 'KES': 'KSh', 'GHS': '₵', 'UGX': 'USh',
             'TZS': 'TSh', 'RWF': 'FRw', 'MZN': 'MT', 'BWP': 'P', 'MWK': 'MK',
             'AOA': 'Kz', 'XOF': 'CFA', 'XAF': 'FCFA', 'MAD': 'د.م.', 'EGP': 'E£',
-            'ETB': 'Br', 'ZWL': 'Z$', 'LSL': 'L', 'NAD': 'N$', 'SZL': 'E',
-            'SCR': 'SR', 'MUR': '₨', 'CVE': '$', 'GNF': 'FG', 'SRD': '$',
-            'GYD': '$', 'HTG': 'G', 'HNL': 'L', 'HUF': 'Ft', 'ISK': 'kr',
-            'IDR': 'Rp', 'IRR': '﷼', 'IQD': 'ع.د', 'JMD': 'J$', 'JOD': 'د.ا',
-            'KZT': '₸', 'KWD': 'د.ك', 'KGS': 'сом', 'LAK': '₭', 'LBP': 'ل.ل',
-            'LRD': 'L$', 'LYD': 'ل.د', 'MOP': 'MOP$', 'MKD': 'ден', 'MGA': 'Ar',
-            'MYR': 'RM', 'MVR': 'ރ.', 'MRU': 'UM', 'MXN': '$', 'MDL': 'L',
-            'MNT': '₮', 'MMK': 'Ks', 'NPR': '₨', 'NIO': 'C$', 'KPW': '₩',
-            'OMR': '﷼', 'PKR': '₨', 'PAB': 'B/.', 'PGK': 'K', 'PYG': '₲',
-            'PEN': 'S/', 'PHP': '₱', 'PLN': 'zł', 'QAR': 'ر.ق', 'RSD': 'дин.',
-            'SAR': 'ر.س', 'SBD': '$', 'WST': 'T', 'STN': 'Db', 'RSD': 'дин.'
+            'ETB': 'Br', 'ZWL': 'Z$', 'LSL': 'L', 'NAD': 'N$', 'SZL': 'E'
         },
         EXCHANGE_RATES: {
-            // Base: ZMW = 1
             'ZMW': 1,
             'USD': 0.05, 'EUR': 0.046, 'GBP': 0.04, 'JPY': 7.5, 'CNY': 0.36,
             'INR': 4.15, 'RUB': 4.6, 'CAD': 0.068, 'AUD': 0.075, 'CHF': 0.045,
             'HKD': 0.39, 'SGD': 0.067, 'NZD': 0.081, 'KRW': 66.5,
-            
-            // African currencies (approximate rates)
             'ZAR': 0.95, 'NGN': 65, 'KES': 6.8, 'GHS': 0.58, 'UGX': 190,
             'TZS': 125, 'RWF': 62, 'MZN': 3.2, 'BWP': 0.68, 'MWK': 52,
             'AOA': 42, 'XOF': 30, 'XAF': 30, 'MAD': 0.5, 'EGP': 1.55,
@@ -50,19 +35,102 @@
         }
     };
 
-    // Load translations from external file if available
+    // Load translations from external file
     let TRANSLATIONS = {};
-
-    // Try to load translations from sts-translations.js
     if (typeof window.STS_TRANSLATIONS !== 'undefined') {
         TRANSLATIONS = window.STS_TRANSLATIONS;
     } else {
-        console.warn('STS Translations not loaded. Please include sts-translations.js');
+        console.warn('STS Translations not loaded. Please include sts-translations.js before sts-settings.js');
     }
+
+    // ========== CUSTOM TOAST ==========
+    window.sts_showToast = function(message, duration = 3000) {
+        const oldToast = document.getElementById('sts-toast');
+        if (oldToast) oldToast.remove();
+
+        const toast = document.createElement('div');
+        toast.id = 'sts-toast';
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid #fbbf24;
+            animation: fadeIn 0.3s, fadeOut 0.3s ${duration-300}ms;
+            opacity: 0;
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => toast.style.opacity = '1', 10);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    };
+
+    // ========== CUSTOM CONFIRM MODAL ==========
+    window.sts_showConfirm = function(message, onConfirm, onCancel) {
+        const oldModal = document.getElementById('sts-modal-overlay');
+        if (oldModal) oldModal.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'sts-modal-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            animation: fadeIn 0.2s;
+        `;
+
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            background: #1e293b;
+            border: 2px solid #fbbf24;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 320px;
+            width: 85%;
+            text-align: center;
+            color: white;
+            animation: slideIn 0.2s;
+        `;
+
+        modal.innerHTML = `
+            <i class="fas fa-exclamation-triangle" style="color:#ef4444; font-size:35px; margin-bottom:15px;"></i>
+            <p style="margin: 15px 0 25px; line-height:1.5;">${message}</p>
+            <div style="display: flex; gap: 10px;">
+                <button id="sts-modal-cancel" style="flex:1; padding:12px; background:#475569; color:white; border:none; border-radius:10px; font-weight:800; cursor:pointer;">Cancel</button>
+                <button id="sts-modal-ok" style="flex:1; padding:12px; background:#fbbf24; color:#0B2B4F; border:none; border-radius:10px; font-weight:800; cursor:pointer;">OK</button>
+            </div>
+        `;
+
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        document.getElementById('sts-modal-cancel').addEventListener('click', () => {
+            overlay.remove();
+            if (onCancel) onCancel();
+        });
+        document.getElementById('sts-modal-ok').addEventListener('click', () => {
+            overlay.remove();
+            if (onConfirm) onConfirm();
+        });
+    };
 
     // ========== INITIALISATION ==========
     function init() {
-        // Set defaults if not present
         if (localStorage.getItem('sts_dark_mode') === null)
             localStorage.setItem('sts_dark_mode', CONFIG.DEFAULT_DARK_MODE);
         if (localStorage.getItem('sts_language') === null)
@@ -72,39 +140,24 @@
         if (localStorage.getItem('sts_data_saver') === null)
             localStorage.setItem('sts_data_saver', CONFIG.DEFAULT_DATA_SAVER);
 
-        // Apply dark mode
         applyDarkMode();
-
-        // Translate page
         translatePage();
-
-        // Format prices
         formatAllPrices();
-
-        // Apply data saver settings
         applyDataSaver();
 
-        // Listen for settings changes (from any page)
         window.addEventListener('sts_settingChanged', function(e) {
             const { key, value } = e.detail;
             switch(key) {
-                case 'dark_mode':
-                    applyDarkMode();
-                    break;
-                case 'language':
-                    translatePage();
-                    break;
+                case 'dark_mode': applyDarkMode(); break;
+                case 'language': translatePage(); break;
                 case 'currency':
                     formatAllPrices();
                     if (typeof window.onCurrencyChange === 'function') window.onCurrencyChange();
                     break;
-                case 'data_saver':
-                    applyDataSaver();
-                    break;
+                case 'data_saver': applyDataSaver(); break;
             }
         });
 
-        // Notify that library is ready
         window.dispatchEvent(new CustomEvent('sts_ready'));
     }
 
@@ -112,19 +165,13 @@
     function applyDarkMode() {
         const isDark = localStorage.getItem('sts_dark_mode') === 'true';
         document.body.classList.toggle('dark-mode', isDark);
-        
-        // Dispatch event for any custom dark mode handlers
-        window.dispatchEvent(new CustomEvent('sts_darkModeChanged', { 
-            detail: { enabled: isDark } 
-        }));
+        window.dispatchEvent(new CustomEvent('sts_darkModeChanged', { detail: { enabled: isDark } }));
     }
 
     window.sts_setDarkMode = function(enabled) {
         localStorage.setItem('sts_dark_mode', enabled);
         applyDarkMode();
-        window.dispatchEvent(new CustomEvent('sts_settingChanged', { 
-            detail: { key: 'dark_mode', value: enabled } 
-        }));
+        window.dispatchEvent(new CustomEvent('sts_settingChanged', { detail: { key: 'dark_mode', value: enabled } }));
     };
 
     window.sts_toggleDarkMode = function() {
@@ -144,14 +191,8 @@
     window.sts_setLanguage = function(langCode) {
         localStorage.setItem('sts_language', langCode);
         translatePage();
-        window.dispatchEvent(new CustomEvent('sts_settingChanged', { 
-            detail: { key: 'language', value: langCode } 
-        }));
-        
-        // Dispatch language-specific event
-        window.dispatchEvent(new CustomEvent('sts_languageChanged', { 
-            detail: { language: langCode } 
-        }));
+        window.dispatchEvent(new CustomEvent('sts_settingChanged', { detail: { key: 'language', value: langCode } }));
+        window.dispatchEvent(new CustomEvent('sts_languageChanged', { detail: { language: langCode } }));
     };
 
     window.sts_translate = function(key, defaultValue = '') {
@@ -167,7 +208,6 @@
     function translatePage() {
         const lang = window.sts_getLanguage();
         
-        // Translate text content
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
@@ -193,7 +233,6 @@
             }
         });
         
-        // Translate placeholders
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
@@ -203,7 +242,6 @@
             }
         });
         
-        // Translate input values (for submit buttons etc.)
         document.querySelectorAll('[data-i18n-value]').forEach(el => {
             const key = el.getAttribute('data-i18n-value');
             if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
@@ -213,7 +251,6 @@
             }
         });
         
-        // Translate title attributes
         document.querySelectorAll('[data-i18n-title]').forEach(el => {
             const key = el.getAttribute('data-i18n-title');
             if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
@@ -223,7 +260,6 @@
             }
         });
         
-        // Translate alt attributes on images
         document.querySelectorAll('[data-i18n-alt]').forEach(el => {
             const key = el.getAttribute('data-i18n-alt');
             if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
@@ -242,14 +278,8 @@
     window.sts_setCurrency = function(currCode) {
         localStorage.setItem('sts_currency', currCode);
         formatAllPrices();
-        window.dispatchEvent(new CustomEvent('sts_settingChanged', { 
-            detail: { key: 'currency', value: currCode } 
-        }));
-        
-        // Dispatch currency-specific event
-        window.dispatchEvent(new CustomEvent('sts_currencyChanged', { 
-            detail: { currency: currCode } 
-        }));
+        window.dispatchEvent(new CustomEvent('sts_settingChanged', { detail: { key: 'currency', value: currCode } }));
+        window.dispatchEvent(new CustomEvent('sts_currencyChanged', { detail: { currency: currCode } }));
     };
 
     window.sts_formatPrice = function(amountInZMW, decimals = 2, currency = null) {
@@ -257,19 +287,16 @@
         const rate = CONFIG.EXCHANGE_RATES[curr] || 1;
         const symbol = CONFIG.CURRENCY_SYMBOLS[curr] || '';
         const converted = amountInZMW * rate;
-        
-        // Format with thousand separators
         const formatted = converted.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         
-        // Handle different currency symbol positions
         if (['USD', 'CAD', 'AUD', 'NZD', 'HKD', 'SGD'].includes(curr)) {
-            return symbol + formatted; // $1,234.56
+            return symbol + formatted;
         } else if (['EUR', 'GBP'].includes(curr)) {
-            return symbol + formatted; // €1,234.56 or £1,234.56
+            return symbol + formatted;
         } else if (['JPY', 'CNY'].includes(curr)) {
-            return symbol + Math.round(converted).toLocaleString(); // ¥1,235
+            return symbol + Math.round(converted).toLocaleString();
         } else if (curr === 'ZMW') {
-            return 'K' + formatted; // K1,234.56
+            return 'K' + formatted;
         } else {
             return symbol + formatted;
         }
@@ -277,15 +304,11 @@
 
     window.sts_convertPrice = function(amount, fromCurrency = 'ZMW', toCurrency = null) {
         const target = toCurrency || window.sts_getCurrency();
-        
-        // Convert to ZMW first if needed
         let inZMW = amount;
         if (fromCurrency !== 'ZMW') {
             const rateToZMW = 1 / (CONFIG.EXCHANGE_RATES[fromCurrency] || 1);
             inZMW = amount * rateToZMW;
         }
-        
-        // Now convert to target currency
         const rate = CONFIG.EXCHANGE_RATES[target] || 1;
         return inZMW * rate;
     };
@@ -299,7 +322,6 @@
             }
         });
         
-        // Format elements with data-price-zmw (for backward compatibility)
         document.querySelectorAll('[data-price-zmw]').forEach(el => {
             const amount = parseFloat(el.getAttribute('data-price-zmw'));
             const decimals = parseInt(el.getAttribute('data-price-decimals') || '2');
@@ -312,18 +334,12 @@
     // ========== DATA SAVER ==========
     function applyDataSaver() {
         const enabled = window.sts_isDataSaverEnabled();
-        
-        // Add data-saver attribute to body for CSS targeting
         if (enabled) {
             document.body.setAttribute('data-saver', 'true');
         } else {
             document.body.removeAttribute('data-saver');
         }
-        
-        // Dispatch event
-        window.dispatchEvent(new CustomEvent('sts_dataSaverChanged', { 
-            detail: { enabled: enabled } 
-        }));
+        window.dispatchEvent(new CustomEvent('sts_dataSaverChanged', { detail: { enabled: enabled } }));
     }
 
     window.sts_isDataSaverEnabled = function() {
@@ -333,9 +349,7 @@
     window.sts_setDataSaver = function(enabled) {
         localStorage.setItem('sts_data_saver', enabled);
         applyDataSaver();
-        window.dispatchEvent(new CustomEvent('sts_settingChanged', { 
-            detail: { key: 'data_saver', value: enabled } 
-        }));
+        window.dispatchEvent(new CustomEvent('sts_settingChanged', { detail: { key: 'data_saver', value: enabled } }));
     };
 
     window.sts_toggleDataSaver = function() {
@@ -359,13 +373,11 @@
         localStorage.setItem('sts_currency', CONFIG.DEFAULT_CURRENCY);
         localStorage.setItem('sts_data_saver', CONFIG.DEFAULT_DATA_SAVER);
         
-        // Apply all settings
         applyDarkMode();
         translatePage();
         formatAllPrices();
         applyDataSaver();
         
-        // Dispatch reset event
         window.dispatchEvent(new CustomEvent('sts_reset'));
     };
 
