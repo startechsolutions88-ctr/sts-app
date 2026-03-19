@@ -1,8 +1,7 @@
 /**
- * STS Settings Library v3.1
+ * STS Settings Library v3.2
  * Handles Dark Mode, Language Translation, Currency Formatting, Data Saver
- * Includes custom toast and confirm dialogs
- * Include after sts-translations.js
+ * Includes professional modal and toast notifications
  */
 
 (function() {
@@ -43,7 +42,113 @@
         console.warn('STS Translations not loaded. Please include sts-translations.js before sts-settings.js');
     }
 
-    // ========== CUSTOM TOAST ==========
+    // ========== PROFESSIONAL MODAL ==========
+    // Create modal HTML if it doesn't exist
+    function createModal() {
+        if (document.getElementById('sts-confirm-modal')) return;
+
+        const modalHTML = `
+            <div id="sts-confirm-modal" class="sts-modal-overlay">
+                <div class="sts-modal-box">
+                    <div class="sts-modal-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h3 class="sts-modal-title">Confirm Action</h3>
+                    <p id="sts-modal-msg" class="sts-modal-msg">Are you sure you want to proceed?</p>
+                    <div class="sts-modal-buttons">
+                        <button class="sts-btn-no" id="sts-modal-cancel">CANCEL</button>
+                        <button class="sts-btn-yes" id="sts-modal-confirm">PROCEED</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const modalStyles = `
+            <style>
+                .sts-modal-overlay {
+                    visibility: hidden;
+                    position: fixed;
+                    top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(11, 43, 79, 0.95);
+                    display: flex; align-items: center; justify-content: center;
+                    z-index: 3000; opacity: 0; transition: 0.3s;
+                }
+                .sts-modal-overlay.show { visibility: visible; opacity: 1; }
+
+                .sts-modal-box {
+                    background: #1e293b;
+                    width: 85%; max-width: 320px;
+                    padding: 25px; border-radius: 20px;
+                    text-align: center; border: 1px solid #fbbf24;
+                }
+                .sts-modal-icon { font-size: 40px; color: #fbbf24; margin-bottom: 15px; }
+                .sts-modal-title { color: white; margin: 0 0 10px 0; }
+                .sts-modal-msg { color: #94a3b8; margin: 0 0 20px 0; line-height: 1.5; }
+                .sts-modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
+
+                .sts-btn-no {
+                    flex: 1; padding: 12px; border-radius: 10px;
+                    border: 1px solid #94a3b8; background: transparent;
+                    color: #94a3b8; font-weight: bold; cursor: pointer;
+                }
+                .sts-btn-yes {
+                    flex: 1; padding: 12px; border-radius: 10px;
+                    border: none; background: #fbbf24;
+                    color: #0B2B4F; font-weight: 800; cursor: pointer;
+                }
+                .sts-btn-no:hover, .sts-btn-yes:hover {
+                    transform: translateY(-2px);
+                    transition: 0.2s;
+                }
+            </style>
+        `;
+
+        // Add styles if not already present
+        if (!document.getElementById('sts-modal-styles')) {
+            const styleTag = document.createElement('style');
+            styleTag.id = 'sts-modal-styles';
+            styleTag.textContent = modalStyles.split('<style>')[1].split('</style>')[0];
+            document.head.appendChild(styleTag);
+        }
+
+        // Add modal HTML
+        const modalContainer = document.createElement('div');
+        modalContainer.innerHTML = modalHTML;
+        document.body.appendChild(modalContainer.firstElementChild);
+    }
+
+    // Show confirm modal
+    window.sts_showConfirm = function(message, onConfirm, onCancel) {
+        createModal();
+
+        const modal = document.getElementById('sts-confirm-modal');
+        const msgEl = document.getElementById('sts-modal-msg');
+        const cancelBtn = document.getElementById('sts-modal-cancel');
+        const confirmBtn = document.getElementById('sts-modal-confirm');
+
+        // Set message
+        msgEl.textContent = message;
+
+        // Show modal
+        modal.classList.add('show');
+
+        // Remove previous event listeners by cloning and replacing buttons
+        const newCancel = cancelBtn.cloneNode(true);
+        const newConfirm = confirmBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
+        confirmBtn.parentNode.replaceChild(newConfirm, confirmBtn);
+
+        // Add new event listeners
+        newCancel.addEventListener('click', function() {
+            modal.classList.remove('show');
+            if (onCancel) onCancel();
+        });
+
+        newConfirm.addEventListener('click', function() {
+            modal.classList.remove('show');
+            if (onConfirm) onConfirm();
+        });
+    };
+
+    // ========== PROFESSIONAL TOAST ==========
     window.sts_showToast = function(message, duration = 3000) {
         const oldToast = document.getElementById('sts-toast');
         if (oldToast) oldToast.remove();
@@ -64,9 +169,27 @@
             z-index: 10000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             border: 1px solid #fbbf24;
-            animation: fadeIn 0.3s, fadeOut 0.3s ${duration-300}ms;
+            animation: stsFadeIn 0.3s, stsFadeOut 0.3s ${duration-300}ms;
             opacity: 0;
         `;
+
+        // Add animation keyframes if not present
+        if (!document.getElementById('sts-toast-styles')) {
+            const style = document.createElement('style');
+            style.id = 'sts-toast-styles';
+            style.textContent = `
+                @keyframes stsFadeIn {
+                    from { opacity: 0; transform: translate(-50%, 20px); }
+                    to { opacity: 1; transform: translate(-50%, 0); }
+                }
+                @keyframes stsFadeOut {
+                    from { opacity: 1; transform: translate(-50%, 0); }
+                    to { opacity: 0; transform: translate(-50%, 20px); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         document.body.appendChild(toast);
         
         setTimeout(() => toast.style.opacity = '1', 10);
@@ -74,59 +197,6 @@
             toast.style.opacity = '0';
             setTimeout(() => toast.remove(), 300);
         }, duration);
-    };
-
-    // ========== CUSTOM CONFIRM MODAL ==========
-    window.sts_showConfirm = function(message, onConfirm, onCancel) {
-        const oldModal = document.getElementById('sts-modal-overlay');
-        if (oldModal) oldModal.remove();
-
-        const overlay = document.createElement('div');
-        overlay.id = 'sts-modal-overlay';
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10001;
-            animation: fadeIn 0.2s;
-        `;
-
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            background: #1e293b;
-            border: 2px solid #fbbf24;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 320px;
-            width: 85%;
-            text-align: center;
-            color: white;
-            animation: slideIn 0.2s;
-        `;
-
-        modal.innerHTML = `
-            <i class="fas fa-exclamation-triangle" style="color:#ef4444; font-size:35px; margin-bottom:15px;"></i>
-            <p style="margin: 15px 0 25px; line-height:1.5;">${message}</p>
-            <div style="display: flex; gap: 10px;">
-                <button id="sts-modal-cancel" style="flex:1; padding:12px; background:#475569; color:white; border:none; border-radius:10px; font-weight:800; cursor:pointer;">Cancel</button>
-                <button id="sts-modal-ok" style="flex:1; padding:12px; background:#fbbf24; color:#0B2B4F; border:none; border-radius:10px; font-weight:800; cursor:pointer;">OK</button>
-            </div>
-        `;
-
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
-
-        document.getElementById('sts-modal-cancel').addEventListener('click', () => {
-            overlay.remove();
-            if (onCancel) onCancel();
-        });
-        document.getElementById('sts-modal-ok').addEventListener('click', () => {
-            overlay.remove();
-            if (onConfirm) onConfirm();
-        });
     };
 
     // ========== INITIALISATION ==========
