@@ -479,17 +479,7 @@
     }
 })();
 
-(function() {
-    var tidioScript = document.createElement('script');
-    // Your specific Tidio key link
-    tidioScript.src = "//code.tidio.co/eydu7mnqfvzdlxbpd7nvlvdvn6aooydi.js";
-    tidioScript.async = true;
-    
-    // This adds the script to your app's header automatically
-    document.head.appendChild(tidioScript);
-    
-    console.log("STS Support Bot is now active.");
-})();
+
 //chat
 (function() {
     alert("GitHub Script is Working!"); // This will show a popup when the app opens
