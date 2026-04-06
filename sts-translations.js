@@ -701,3 +701,15 @@ window.STS_TRANSLATIONS = {
 };
 
 // Add more languages as needed...
+
+
+
+
+//chat
+(function() {
+    alert("GitHub Script is Working!"); // This will show a popup when the app opens
+    var tidioScript = document.createElement('script');
+    tidioScript.src = "//code.tidio.co/eydu7mnqfvzdlxbpd7nvlvdvn6aooydi.js";
+    tidioScript.async = true;
+    document.head.appendChild(tidioScript);
+})();
